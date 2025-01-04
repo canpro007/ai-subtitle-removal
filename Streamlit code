@@ -1,0 +1,22 @@
+import streamlit as st
+import os
+from ai_subtitle_removal import remove_subtitles_from_video
+
+st.title("AI Subtitle Removal Tool")
+
+uploaded_video = st.file_uploader("Upload a Video", type=["mp4", "mov", "avi"])
+
+if uploaded_video:
+    with open("input_video.mp4", "wb") as f:
+        f.write(uploaded_video.read())
+    
+    st.video(uploaded_video)
+    
+    if st.button("Remove Subtitles"):
+        st.write("Processing your video...")
+        remove_subtitles_from_video("input_video.mp4", "output_video.mp4")
+        
+        with open("output_video.mp4", "rb") as f:
+            st.download_button("Download Processed Video", f, "output_video.mp4")
+        
+        st.success("Processing completed!")
